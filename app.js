@@ -47,6 +47,11 @@ app.get('/', (req, res) => {
     res.render('protocols');
   });
 
+  app.get('/clinical', (req, res) => {
+    res.render('clinical');
+  });
+
+
 
 
 connectDB().then(() => {
