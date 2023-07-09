@@ -43,8 +43,8 @@ app.get('/', (req, res) => {
     res.render('research');
   });
 
-  app.get('/protocols', (req, res) => {
-    res.render('protocols');
+  app.get('/admin', (req, res) => {
+    res.render('admin');
   });
 
   app.get('/clinical', (req, res) => {
