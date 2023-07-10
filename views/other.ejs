@@ -63,27 +63,58 @@
 
 
 <body>
+    <br>
+    <h2>Other</h2>
+    <div class="container">
+<br>
+<div class="row mb-4">
+    <div class="col-sm-6 col-md-4">
+<div class="card mb-4" >
+    <div class="card-body">
+      <h5 class="card-title">Other stuff</h5>
+             
+      
+      <a href="https://drive.google.com/drive/u/1/folders/1JG9ACFDmOMY3o-KI7rdlwhCRMfQ4XwzR" class="card-link">IT support</a>
+      
+    </div>
+  </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-right mt-3 mb-3">
+          <a href="/home" class="btn btn-secondary p-2">HOME</a>
+        </div>
+      </div>
+      </div>
+     
 
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script>
+      // Function to format time components
+      function formatTime(i) {
+        if (i < 10) {
+          i = "0" + i;
+        }
+        return i;
+      }
+    
       // Function to update the digital clock and current date
       function updateClock() {
-          var currentTime = new Date();
-          var hours = currentTime.getHours();
-          var minutes = currentTime.getMinutes();
-          var seconds = currentTime.getSeconds();
-          var timeString = hours + ':' + minutes + ':' + seconds;
-          
-          var currentDate = currentTime.toDateString();
-          
-          document.getElementById('digital-clock').textContent = timeString;
-          document.getElementById('current-date').textContent = currentDate;
+        var currentTime = new Date();
+        var hours = formatTime(currentTime.getHours());
+        var minutes = formatTime(currentTime.getMinutes());
+        var seconds = formatTime(currentTime.getSeconds());
+        var timeString = hours + ':' + minutes + ':' + seconds;
+    
+        var currentDate = currentTime.toLocaleDateString(undefined, { month: 'long', day: 'numeric' });
+    
+        document.getElementById('digital-clock').textContent = timeString;
+        document.getElementById('current-date').textContent = currentDate;
       }
-  
+    
       // Update the clock every second
       setInterval(updateClock, 1000);
-  </script>
+    </script>
+    
+
 </body>
-</html>  
+</html>

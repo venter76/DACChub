@@ -50,8 +50,7 @@ async function createOrUpdateInfo() {
   const enter = process.env.ENTER;
   const password = process.env.PASSWORD;
 
-  console.log('USERNAME:', process.env.ENTER);
-console.log('PASSWORD:', process.env.PASSWORD);
+  
 
 
   // Hash the password
