@@ -27,12 +27,12 @@
   }
 
     #digital-clock {
-        font-size: 17px;
+        font-size: 4vw;
         padding-top: 2vh 
     }
 
     #current-date {
-      font-size: 17px;
+      font-size: 4vw;
       padding-top: 1vh ;
     }
 
@@ -141,29 +141,30 @@
     <script>
       // Function to format time components
       function formatTime(i) {
-          if (i < 10) {
-              i = "0" + i;
-          }
-          return i;
+        if (i < 10) {
+          i = "0" + i;
+        }
+        return i;
       }
-
+    
       // Function to update the digital clock and current date
       function updateClock() {
-          var currentTime = new Date();
-          var hours = formatTime(currentTime.getHours());
-          var minutes = formatTime(currentTime.getMinutes());
-          var seconds = formatTime(currentTime.getSeconds());
-          var timeString = hours + ':' + minutes + ':' + seconds;
-          
-          var currentDate = currentTime.toDateString();
-          
-          document.getElementById('digital-clock').textContent = timeString;
-          document.getElementById('current-date').textContent = currentDate;
+        var currentTime = new Date();
+        var hours = formatTime(currentTime.getHours());
+        var minutes = formatTime(currentTime.getMinutes());
+        var seconds = formatTime(currentTime.getSeconds());
+        var timeString = hours + ':' + minutes + ':' + seconds;
+    
+        var currentDate = currentTime.toLocaleDateString(undefined, { month: 'long', day: 'numeric' });
+    
+        document.getElementById('digital-clock').textContent = timeString;
+        document.getElementById('current-date').textContent = currentDate;
       }
-  
+    
       // Update the clock every second
       setInterval(updateClock, 1000);
-</script>
+    </script>
+    
 
 </body>
 </html>
