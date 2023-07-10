@@ -148,6 +148,13 @@ app.get('/home', (req, res) => {
     res.render('clinical');
   });
 
+  app.get('/academic', (req, res) => {
+    res.render('academic');
+  });
+
+  app.get('/other', (req, res) => {
+    res.render('other');
+  });
 
 
 
