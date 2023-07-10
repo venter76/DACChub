@@ -45,6 +45,17 @@ const Info = new mongoose.model("Info", infoSchema);
 module.exports = Info;
 
 
+
+const countSchema = new mongoose.Schema({
+  date: Date,
+});
+
+const Count = new mongoose.model("Count", countSchema);
+
+module.exports = Count;
+
+
+
 async function createOrUpdateInfo() {
 
   const enter = process.env.ENTER;
@@ -104,6 +115,10 @@ app.get('/', (req, res) => {
         // Username or password is incorrect
         return res.status(401).render('login', { message: 'Invalid username or password.' });
       }
+
+       // Create a new Count document with the current date and time
+    const newCount = new Count({ date: Date.now() });
+    await newCount.save();
   
       // Username and password are correct
       return res.status(200).render('home');

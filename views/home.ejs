@@ -146,6 +146,18 @@
         }
         return i;
       }
+
+       // Function to add the correct suffix to the day of the month
+  function formatDate(i) {
+    if (i < 4 || i > 20) {
+      switch (i % 10) {
+        case 1:  return i + "st";
+        case 2:  return i + "nd";
+        case 3:  return i + "rd";
+      }
+    }
+    return i + "th";
+  }
     
       // Function to update the digital clock and current date
       function updateClock() {
@@ -154,8 +166,12 @@
         var minutes = formatTime(currentTime.getMinutes());
         var seconds = formatTime(currentTime.getSeconds());
         var timeString = hours + ':' + minutes + ':' + seconds;
+
+        var day = formatDate(currentTime.getDate());
+    var month = currentTime.toLocaleString(undefined, { month: 'long' });
+    var currentDate = month + ' ' + day;
     
-        var currentDate = currentTime.toLocaleDateString(undefined, { month: 'long', day: 'numeric' });
+        // var currentDate = currentTime.toLocaleDateString(undefined, { month: 'long', day: 'numeric' });
     
         document.getElementById('digital-clock').textContent = timeString;
         document.getElementById('current-date').textContent = currentDate;
