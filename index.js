@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 require('dotenv').config();
 const crypto = require('crypto');
+const checkAuthenticated = require('./authenticate.js');
+
 
   
 
@@ -13,6 +15,15 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 const bcrypt = require('bcryptjs');
+const session = require('express-session');
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: process.env.NODE_ENV === 'production' }
+}))
+
 
 
 const db_username = process.env.DB_USERNAME;
@@ -116,6 +127,9 @@ app.get('/', (req, res) => {
         return res.status(401).render('login', { message: 'Invalid username or password.' });
       }
 
+      req.session.isLoggedIn = true;
+
+
        // Create a new Count document with the current date and time
     const newCount = new Count({ date: Date.now() });
     await newCount.save();
@@ -131,28 +145,31 @@ app.get('/', (req, res) => {
   });
 
 
-app.get('/home', (req, res) => {
+
+  app.get('/home', checkAuthenticated, (req, res) => {
     res.render('home');
   });
+  
+  
 
 
-  app.get('/research', (req, res) => {
+  app.get('/research', checkAuthenticated, (req, res) => {
     res.render('research');
   });
 
-  app.get('/admin', (req, res) => {
+  app.get('/admin', checkAuthenticated, (req, res) => {
     res.render('admin');
   });
 
-  app.get('/clinical', (req, res) => {
+  app.get('/clinical', checkAuthenticated, (req, res) => {
     res.render('clinical');
   });
 
-  app.get('/academic', (req, res) => {
+  app.get('/academic', checkAuthenticated, (req, res) => {
     res.render('academic');
   });
 
-  app.get('/other', (req, res) => {
+  app.get('/other', checkAuthenticated, (req, res) => {
     res.render('other');
   });
 
