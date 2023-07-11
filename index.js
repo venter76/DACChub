@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 require('dotenv').config();
 const crypto = require('crypto');
 const checkAuthenticated = require('./authenticate.js');
+const MongoStore = require('connect-mongo');
+
 
 
   
@@ -17,12 +19,7 @@ app.use(express.static('public'));
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
 
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: process.env.NODE_ENV === 'production' }
-}))
+
 
 
 
@@ -64,6 +61,22 @@ const countSchema = new mongoose.Schema({
 const Count = new mongoose.model("Count", countSchema);
 
 module.exports = Count;
+
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ 
+    mongoUrl: `mongodb+srv://${db_username}:${db_password}@${db_cluster_url}/${db_name}?retryWrites=true&w=majority`,
+    }),
+  cookie: { secure: process.env.NODE_ENV === 'production' }
+}));
+
+
+
+
+
 
 
 
@@ -108,41 +121,49 @@ app.get('/', (req, res) => {
 });
 
 
-
-
-  app.post('/login', async (req, res) => {
-    try {
-      const { enter, password } = req.body;
+app.post('/login', async (req, res) => {
+  try {
+    const { enter, password } = req.body;
       
-      // Fetch the stored Info
-      const info = await Info.findOne({});
-  
-      if (!info) {
-        // No Info in database
-        return res.status(400).send('No information found in the database.');
-      }
-  
-      if (enter !== info.enter || !(await bcrypt.compare(password, info.password))) {
-        // Username or password is incorrect
-        return res.status(401).render('login', { message: 'Invalid username or password.' });
-      }
+    // Fetch the stored Info
+    const info = await Info.findOne({});
 
-      req.session.isLoggedIn = true;
-
-
-       // Create a new Count document with the current date and time
-    const newCount = new Count({ date: Date.now() });
-    await newCount.save();
-  
-      // Username and password are correct
-      return res.status(200).render('home');
-    
-    } catch (err) {
-      console.error(err);
-      return res.status(500).send('Internal server error.');
-      
+    if (!info) {
+      // No Info in database
+      return res.status(400).send('No information found in the database.');
     }
-  });
+
+    if (enter !== info.enter || !(await bcrypt.compare(password, info.password))) {
+      // Username or password is incorrect
+      return res.status(401).render('login', { message: 'Invalid username or password.' });
+    }
+
+    req.session.isLoggedIn = true;
+    
+    req.session.save(err => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Internal server error.');
+      }
+      
+      // Create a new Count document with the current date and time
+      const newCount = new Count({ date: Date.now() });
+      newCount.save().then(() => {
+        // Username and password are correct
+        res.status(200).render('home');
+      }).catch(err => {
+        console.error(err);
+        return res.status(500).send('Internal server error.');
+      });
+    });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Internal server error.');
+  }
+});
+
+
 
 
 
