@@ -63,6 +63,9 @@ const Count = new mongoose.model("Count", countSchema);
 module.exports = Count;
 
 
+
+app.set('trust proxy', 1);
+
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -70,8 +73,15 @@ app.use(session({
   store: MongoStore.create({ 
     mongoUrl: `mongodb+srv://${db_username}:${db_password}@${db_cluster_url}/${db_name}?retryWrites=true&w=majority`,
     }),
-  cookie: { secure: process.env.NODE_ENV === 'production' }
-}));
+    cookie: { 
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
+      httpOnly: true, // prevents JavaScript from making changes
+    }
+  }));
+
+//   cookie: { secure: process.env.NODE_ENV === 'production' }
+// }));
 
 
 
