@@ -27,7 +27,9 @@ const db_username = process.env.DB_USERNAME;
 const db_password = process.env.DB_PASSWORD;
 const db_cluster_url = process.env.DB_CLUSTER_URL;
 const db_name = process.env.DB_NAME;
-// mongodb+srv://stephenventer47:oliviaventer@cluster2.swytrma.mongodb.net/
+
+
+
 
 const connectDB = async () => {
   try {
@@ -49,7 +51,6 @@ const infoSchema = new mongoose.Schema({
 });
 
 const Info = new mongoose.model("Info", infoSchema);
-
 module.exports = Info;
 
 
@@ -59,9 +60,10 @@ const countSchema = new mongoose.Schema({
 });
 
 const Count = new mongoose.model("Count", countSchema);
-
 module.exports = Count;
 
+
+//Session cookie setup:
 
 
 app.set('trust proxy', 1);
@@ -80,8 +82,7 @@ app.use(session({
     }
   }));
 
-//   cookie: { secure: process.env.NODE_ENV === 'production' }
-// }));
+
 
 
 
@@ -123,6 +124,8 @@ async function createOrUpdateInfo() {
 createOrUpdateInfo().catch(console.error);
 
 
+
+// Route code:
 
 
 app.get('/', (req, res) => {
